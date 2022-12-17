@@ -9,6 +9,7 @@ object Main {
   val okFileExtensions: Seq[String] = Seq("csv")
   val acceptedColName: String = "Is Accepted"
   val neptun: String = "NEPTUN"
+  val name: String = "Name"
   val homeworkIndicatorInFileName: String = "Házi"
   val examIndicatorInFileName: String = "ZH"
   val pVzIndicatorInFileName: String = "Plants"
@@ -44,7 +45,7 @@ object Main {
     val merged: DataFrame = examResults
       .join(passedHomework, Seq(neptun), "inner")
       .join(pvzDF, Seq(neptun), "inner")
-      .select(col(neptun),
+      .select(col(name), col(neptun),
         (col("exam_points") + col("PVZ")).as("points"))
       .withColumn("grade", getGrade(col("points")))
 
@@ -55,7 +56,7 @@ object Main {
   def calculatePVZ(files: Seq[File])(implicit spark: SparkSession): DataFrame = {
     val pvzFile: File = files.filter(_.getName.contains(pVzIndicatorInFileName)).head
     val pvzColName = "PVZ"
-    readDF(pvzFile).withColumn(pvzColName, col("Grade5")).select(neptun, pvzColName)
+    readDF(pvzFile).withColumn(pvzColName, col("Grade5")).select(name, neptun, pvzColName)
 }
 
   def calculateExam(files: Seq[File], neptunCodes: DataFrame)(implicit spark: SparkSession): DataFrame = {
