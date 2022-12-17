@@ -20,7 +20,7 @@ object Main {
   val theotyThreshold: Int = 3
   val nameOfCorrective: String = "zh5"
   val gradesMap: Map[Double, Int] = Map(21.0 -> 5, 18.0 -> 4, 15.0 -> 3, 12.0 -> 2)
-  val getGrade = udf ( (score: Double) => gradesMap.find(_._1 < score).map(_._2).getOrElse(1) )
+  val getGrade = udf ( (score: Double) => gradesMap.find(_._1 <= score).map(_._2).getOrElse(1) )
 
 
 
