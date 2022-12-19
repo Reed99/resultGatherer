@@ -6,6 +6,7 @@ import scala.language.postfixOps
 
 object Main {
 
+  val groupNumber: Int = 1
   val okFileExtensions: Seq[String] = Seq("csv")
   val acceptedColName: String = "Is Accepted"
   val neptun: String = "NEPTUN"
@@ -48,6 +49,7 @@ object Main {
       .select(col(name), col(neptun),
         (col("exam_points") + col("PVZ")).as("points"))
       .withColumn("grade", getGrade(col("points")))
+      .withColumn("group_number", lit(groupNumber))
 
     writeCSV(merged, "results")
 
