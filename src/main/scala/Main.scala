@@ -46,10 +46,9 @@ object Main {
     val merged: DataFrame = examResults
       .join(passedHomework, Seq(neptun), "inner")
       .join(pvzDF, Seq(neptun), "inner")
-      .select(col(name), col(neptun),
+      .select(lit(groupNumber).as("group_number"), col(name), col(neptun),
         (col("exam_points") + col("PVZ")).as("points"))
       .withColumn("grade", getGrade(col("points")))
-      .withColumn("group_number", lit(groupNumber))
 
     writeCSV(merged, "results")
 
