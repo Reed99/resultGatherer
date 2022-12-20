@@ -57,7 +57,10 @@ object Main {
   def calculatePVZ(files: Seq[File])(implicit spark: SparkSession): DataFrame = {
     val pvzFile: File = files.filter(_.getName.contains(pVzIndicatorInFileName)).head
     val pvzColName = "PVZ"
-    readDF(pvzFile).withColumn(pvzColName, col("Grade5")).select(name, neptun, pvzColName)
+    readDF(pvzFile)
+      .filter(col(acceptedColName).isin(acceptedStatus: _*))
+      .withColumn(pvzColName, col("Grade5"))
+      .select(name, neptun, pvzColName)
 }
 
   def calculateExam(files: Seq[File], neptunCodes: DataFrame)(implicit spark: SparkSession): DataFrame = {
